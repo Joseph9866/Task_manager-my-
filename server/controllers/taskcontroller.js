@@ -7,7 +7,7 @@ exports.createTask = async (req, res) => {
 };
 
 //Get /api/tasks
-expoerts.getMyTasks = async (req, res) => {
+exports.getMyTasks = async (req, res) => {
     const tasks = await Task.find({ owner: req.user._id });
     res.status(200).json(tasks);
 };
