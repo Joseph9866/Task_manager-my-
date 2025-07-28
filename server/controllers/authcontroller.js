@@ -14,7 +14,10 @@ const generateToken = (user) => {
 // POST /api/auth/signup
 exports.signup = async (req, res) => {
   try {
-    const { email, password, role } = req.body;
+    const { name, email, password, role } = req.body;
+
+    // Debug: log request body
+    console.log('Signup request body:', req.body);
 
     // Check if user exists
     const existingUser = await User.findOne({ email });
@@ -27,6 +30,7 @@ exports.signup = async (req, res) => {
 
     // Create user
     const user = await User.create({
+      name,
       email,
       password: hashedPassword,
       role: role || 'user', // default to 'user'
@@ -38,6 +42,7 @@ exports.signup = async (req, res) => {
       token,
       user: {
         id: user._id,
+        name: user.name,
         email: user.email,
         role: user.role,
       }
@@ -70,6 +75,7 @@ exports.login = async (req, res) => {
       token,
       user: {
         id: user._id,
+        name: user.name,
         email: user.email,
         role: user.role,
       }
