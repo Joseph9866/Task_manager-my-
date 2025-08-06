@@ -1,11 +1,26 @@
 const express = require('express');
-const { createTask, getMyTasks, getAllTasks } = require('../controllers/taskcontroller');
-const {protect, authorize} = require('../middleware/auth');
+const { 
+  createTask, 
+  getMyTasks, 
+  getAllTasks, 
+  updateTask, 
+  deleteTask, 
+  toggleComplete 
+} = require('../controllers/taskController');
+const { protect, authorize } = require('../middleware/auth');
 const router = express.Router();
 
-// Route to create a new task
-router.post('/', protect, createTask); 
-router.get('/me', protect, getMyTasks);
-router.get('/all', protect, authorize('admin'), getAllTasks); // Only admin can access all tasks
+// All routes require authentication
+router.use(protect);
+
+// Task CRUD operations
+router.post('/', createTask);
+router.get('/me', getMyTasks);
+router.put('/:id', updateTask);
+router.put('/:id/toggle', toggleComplete);
+router.delete('/:id', deleteTask);
+
+// Admin only routes
+router.get('/all', authorize('admin'), getAllTasks);
 
 module.exports = router;
